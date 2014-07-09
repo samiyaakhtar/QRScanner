@@ -25,6 +25,7 @@ public class MainActivity extends Activity implements OnClickListener
 {
 	private Button scanBtn;
 	private TextView formatTxt, contentTxt;
+	MySpreadsheet sheet;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,8 @@ public class MainActivity extends Activity implements OnClickListener
 		scanBtn = (Button)findViewById(R.id.scan_button);
 		formatTxt = (TextView)findViewById(R.id.scan_format);
 		contentTxt = (TextView)findViewById(R.id.scan_content);
+		
+		sheet = new MySpreadsheet(this);
 		
 		scanBtn.setOnClickListener(this);
 	}
@@ -92,12 +95,14 @@ public class MainActivity extends Activity implements OnClickListener
 			
 			formatTxt.setText("FORMAT: " + scanFormat);
 			contentTxt.setText("CONTENT: " + scanContent);
-			}
+			
+			sheet.verifyScan(scanContent);
+		}
 		else{
 		    Toast toast = Toast.makeText(getApplicationContext(), 
 		        "No scan data received!", Toast.LENGTH_SHORT);
 		    toast.show();
 		}
-		}
+	}
 
 }
