@@ -97,6 +97,17 @@ public class MainActivity extends Activity implements OnClickListener
 			contentTxt.setText("CONTENT: " + scanContent);
 			
 		//	sheet.verifyScan(scanContent);
+			if( ArraySolution.isPersonAuthorizedToEnter(scanContent)) {
+				Toast toast = Toast.makeText(getApplicationContext(), 
+				        "Entry is legal!", Toast.LENGTH_SHORT);
+				    toast.show();
+			}
+			else
+			{
+				Toast toast = Toast.makeText(getApplicationContext(), 
+				        "Duplicate QR! Cannot Enter!", Toast.LENGTH_SHORT);
+				    toast.show();
+			}
 		}
 		else{
 		    Toast toast = Toast.makeText(getApplicationContext(), 
