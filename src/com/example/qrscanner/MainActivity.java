@@ -36,7 +36,7 @@ public class MainActivity extends Activity implements OnClickListener
 		formatTxt = (TextView)findViewById(R.id.scan_format);
 		contentTxt = (TextView)findViewById(R.id.scan_content);
 		
-		sheet = new MySpreadsheet(this);
+		//sheet = new MySpreadsheet(this);
 		
 		scanBtn.setOnClickListener(this);
 	}
@@ -96,7 +96,7 @@ public class MainActivity extends Activity implements OnClickListener
 			formatTxt.setText("FORMAT: " + scanFormat);
 			contentTxt.setText("CONTENT: " + scanContent);
 			
-			sheet.verifyScan(scanContent);
+		//	sheet.verifyScan(scanContent);
 		}
 		else{
 		    Toast toast = Toast.makeText(getApplicationContext(), 

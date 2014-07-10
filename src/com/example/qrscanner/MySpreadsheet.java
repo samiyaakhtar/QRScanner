@@ -18,7 +18,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.gdata.client.authn.oauth.GoogleOAuthParameters; 
-import com.google.gdata.client.docs.*;
+//import com.google.gdata.client.docs.*;
 import com.google.gdata.client.authn.oauth.*;
 
 import java.io.IOException;
