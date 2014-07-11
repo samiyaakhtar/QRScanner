@@ -12,9 +12,14 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Json {
-public static JSONObject getJson(String url){
-		
+import android.os.AsyncTask;
+
+public class Json extends AsyncTask<String, Void, JSONObject> {
+
+
+	@Override
+	protected JSONObject doInBackground(String... url) {
+		// TODO Auto-generated method stub
 		InputStream is = null;
 		String result = "";
 		JSONObject jsonObject = null;
@@ -22,7 +27,7 @@ public static JSONObject getJson(String url){
 		// HTTP
 		try {	    	
 			HttpClient httpclient = new DefaultHttpClient(); // for port 80 requests!
-			HttpPost httppost = new HttpPost(url);
+			HttpPost httppost = new HttpPost(url[0].toString());
 			HttpResponse response = httpclient.execute(httppost);
 			HttpEntity entity = response.getEntity();
 			is = entity.getContent();
@@ -52,6 +57,5 @@ public static JSONObject getJson(String url){
 		}
     
 		return jsonObject;
- 
 	}
 }

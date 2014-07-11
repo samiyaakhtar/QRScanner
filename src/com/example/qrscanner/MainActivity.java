@@ -93,6 +93,8 @@ public class MainActivity extends Activity implements OnClickListener
 		}
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		//retrieve scan result
+		try
+		{
 		IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
 		if (scanningResult != null) {
 			//we have a result
@@ -102,10 +104,12 @@ public class MainActivity extends Activity implements OnClickListener
 			formatTxt.setText("FORMAT: " + scanFormat);
 			contentTxt.setText("CONTENT: " + scanContent);
 			
-			Json myjson = new Json();
 			
 			String finalurl = url1 + scanContent + url2;
-			JSONObject jsonparse = myjson.getJson(finalurl);
+			Json getJsonFromUrl = new Json();
+			getJsonFromUrl.execute(finalurl);
+			
+			JSONObject jsonparse = getJsonFromUrl.get();
 			JSONArray rows = null;
 			try {
 				 rows = jsonparse.getJSONObject("table").getJSONArray("rows");
@@ -142,6 +146,11 @@ public class MainActivity extends Activity implements OnClickListener
 		    Toast toast = Toast.makeText(getApplicationContext(), 
 		        "No scan data received!", Toast.LENGTH_SHORT);
 		    toast.show();
+		}
+	}
+		catch(Exception e){
+			
+			
 		}
 	}
 
