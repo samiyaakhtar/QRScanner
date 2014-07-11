@@ -1,13 +1,17 @@
 package com.example.qrscanner;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.params.ClientPNames;
@@ -20,6 +24,7 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
@@ -160,5 +165,46 @@ public class HttpRequest{
         } // end try-catch
 
         return in;     
+    }
+    
+    public JSONObject getJSONObjectFromScannedContent(String scannedContent) {
+    	String url = "https://docs.google.com/spreadsheets/d/1ueaft1tUCYssK_ucANSQbhmF7At09lv1MqSapH6T_Gc/gviz/tq?tqx=out:json&tq=select+B+where+(+G+%3D+" + scannedContent + ")";
+    	
+    	InputStream is = null;
+		String result = "";
+		JSONObject jsonObject = null;
+    	// HTTP
+		try {	    	
+			HttpClient httpclient = new DefaultHttpClient(); // for port 80 requests!
+			HttpPost httppost = new HttpPost(url);
+			HttpResponse response = httpclient.execute(httppost);
+			HttpEntity entity = response.getEntity();
+			is = entity.getContent();
+		} catch(Exception e) {
+			return null;
+		}
+		// Read response to string
+		try {	    	
+			BufferedReader reader = new BufferedReader(new InputStreamReader(is,"utf-8"),8);
+			StringBuilder sb = new StringBuilder();
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+			is.close();
+			result = sb.toString();	            
+		} catch(Exception e) {
+			return null;
+		}
+ 
+		// Convert string to object
+		try {
+			jsonObject = new JSONObject(result);            
+		} catch(JSONException e) {
+			return null;
+		}
+    
+		return jsonObject;
+    			
     }
 }

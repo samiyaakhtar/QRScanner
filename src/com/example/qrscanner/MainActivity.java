@@ -1,5 +1,9 @@
 package com.example.qrscanner;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.support.v7.app.ActionBarActivity;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -26,7 +30,9 @@ public class MainActivity extends Activity implements OnClickListener
 	private Button scanBtn;
 	private TextView formatTxt, contentTxt;
 	MySpreadsheet sheet;
+	String url1 ="https://spreadsheets.google.com/tq?tqx=out:tq?tqx=out:json&tq=select+B+where+(+G+%3D+";
 	
+	String url2 = ")&key=1ueaft1tUCYssK_ucANSQbhmF7At09lv1MqSapH6T_Gc&gid=2";	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -96,7 +102,41 @@ public class MainActivity extends Activity implements OnClickListener
 			formatTxt.setText("FORMAT: " + scanFormat);
 			contentTxt.setText("CONTENT: " + scanContent);
 			
+			Json myjson = new Json();
+			
+			String finalurl = url1 + scanContent + url2;
+			JSONObject jsonparse = myjson.getJson(finalurl);
+			JSONArray rows = null;
+			try {
+				 rows = jsonparse.getJSONObject("table").getJSONArray("rows");
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (rows.length() == 0){
+				Toast toast = Toast.makeText(getApplicationContext(), 
+				        "Invalid QR! Cannot Enter!", Toast.LENGTH_SHORT);
+				    toast.show();
+			}
+			else {
+				Toast toast = Toast.makeText(getApplicationContext(), 
+				        "Entry is legal!", Toast.LENGTH_SHORT);
+				    toast.show();
+			}
 		//	sheet.verifyScan(scanContent);
+			/* ArraySolution 
+			if( ArraySolution.isPersonAuthorizedToEnter(scanContent)) {
+				Toast toast = Toast.makeText(getApplicationContext(), 
+				        "Entry is legal!", Toast.LENGTH_SHORT);
+				    toast.show();
+			}
+			else
+			{
+				Toast toast = Toast.makeText(getApplicationContext(), 
+				        "Duplicate QR! Cannot Enter!", Toast.LENGTH_SHORT);
+				    toast.show();
+			}
+			*/
 		}
 		else{
 		    Toast toast = Toast.makeText(getApplicationContext(), 
