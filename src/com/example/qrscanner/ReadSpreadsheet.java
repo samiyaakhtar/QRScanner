@@ -27,62 +27,19 @@ import java.net.*;
 import java.util.*;
 
 
-public class MySpreadsheet {
+public class ReadSpreadsheet {
 	
 	
 	private MainActivity m_activity;
 
 	public static String REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob";
 	
-	private class checkSpreadsheet extends AsyncTask<String, Void, Boolean>{
+	public class checkSpreadsheet extends AsyncTask<String, Void, Boolean>{
 		
 		@Override
 		protected Boolean doInBackground(String... params) {
 			// TODO Auto-generated method stub
-			/*
-			try
-			{	        
-
-		        GoogleOAuthParameters oauthParameters = new GoogleOAuthParameters();
-		        oauthParameters.setOAuthConsumerKey (Config.CLIENT_ID);
-		        oauthParameters.setOAuthConsumerSecret (Config.CLIENT_SECRET);
-		        oauthParameters.setOAuthType (OAuthType.TWO_LEGGED_OAUTH);
-		        oauthParameters.setScope ("https://spreadsheets.google.com/feeds/");
-	
-				SpreadsheetService client = new SpreadsheetService("QRScanner");
-				client.useSsl();
-				client.setOAuthCredentials (oauthParameters, new OAuthHmacSha1Signer ());
-
-
-				if( client != null ){
-					client.setUserCredentials(Config.GOOGLE_ACCOUNT_USERNAME, Config.GOOGLE_ACCOUNT_PASSWORD);
-			        
-					URL metafeedUrl = new URL(Config.SPREADSHEET_URL);
-					
-					SpreadsheetEntry spreadsheet = client.getEntry(metafeedUrl,SpreadsheetEntry.class);
-			        URL listFeedUrl = spreadsheet.getWorksheets().get(0).getListFeedUrl();
-
-			        // Print entries
-			        ListFeed feed = client.getFeed(listFeedUrl, ListFeed.class);
-
-			        for (ListEntry entry : feed.getEntries()) {
-			            System.out.println("new row");
-			            for (String tag : entry.getCustomElements().getTags()) {
-			                System.out.println("     " + tag + ": "
-			                        + entry.getCustomElements().getValue(tag));
-
-			            }
-			        }
-			        
-			        System.out.println("YOOOO");
-				}
-
-			}
-			catch(Exception e){
-		        System.out.println(e);
-		    }
-			return null;
-			*/
+			
 		    try {
 		        GoogleOAuthParameters oauthParameters = new GoogleOAuthParameters();
 		        oauthParameters.setOAuthConsumerKey (Config.CLIENT_ID);
@@ -111,14 +68,20 @@ public class MySpreadsheet {
 		        CustomElementCollection elements = entry.getCustomElements();
 		        String name = elements.getValue("fullname");
 		        System.out.println(name);
-		        String number = elements.getValue("emailaddress");
-		        System.out.println(number);
+		        String email = elements.getValue("emailaddress");
+		        System.out.println(email);
+		        String qrcontent = elements.getValue("qrcontent");
+		        System.out.println(qrcontent);
+		        
+		        if(qrcontent.equals(params[0])) {
+		        	return true;
+		        }
 		      }
 		    } catch (Exception e) {
 		      e.printStackTrace();
 		    }
 		    
-		    return true;
+		    return false;
 		}
 		
 		@Override
@@ -129,15 +92,22 @@ public class MySpreadsheet {
 	    }
 	}
 	
-	public MySpreadsheet(MainActivity activity)
+	public ReadSpreadsheet(MainActivity activity)
 	{
 		m_activity = activity;
 		
 	}
 	public boolean verifyScan(String scannedContent) {
 		
-		new checkSpreadsheet().execute(scannedContent);
-        return true;
+		try
+		{
+			checkSpreadsheet checking = new checkSpreadsheet();
+			checking.execute(scannedContent);
+	        return checking.get();
+		}
+		catch(Exception e){
+			return false;
+		}
 	}
 	
 	

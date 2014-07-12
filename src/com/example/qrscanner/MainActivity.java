@@ -18,6 +18,8 @@ import android.view.ViewGroup;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,7 +31,8 @@ public class MainActivity extends Activity implements OnClickListener
 {
 	private Button scanBtn;
 	private TextView formatTxt, contentTxt;
-	MySpreadsheet sheet;
+	ReadSpreadsheet sheet;
+    private AlertDialog.Builder alertDialogBuilder;
 	String url1 ="https://spreadsheets.google.com/tq?tqx=out:tq?tqx=out:json&tq=select+B+where+(+G+%3D+";
 	
 	String url2 = ")&key=1ueaft1tUCYssK_ucANSQbhmF7At09lv1MqSapH6T_Gc&gid=2";	
@@ -37,12 +40,13 @@ public class MainActivity extends Activity implements OnClickListener
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+        alertDialogBuilder = new AlertDialog.Builder( this);
 
 		scanBtn = (Button)findViewById(R.id.scan_button);
 		formatTxt = (TextView)findViewById(R.id.scan_format);
 		contentTxt = (TextView)findViewById(R.id.scan_content);
 		
-		sheet = new MySpreadsheet(this);
+		sheet = new ReadSpreadsheet(this);
 		
 		scanBtn.setOnClickListener(this);
 	}
@@ -104,7 +108,7 @@ public class MainActivity extends Activity implements OnClickListener
 			formatTxt.setText("FORMAT: " + scanFormat);
 			contentTxt.setText("CONTENT: " + scanContent);
 			
-			sheet.verifyScan(scanContent);
+			showResultOfScan( sheet.verifyScan(scanContent) );
 			
 			/* Json stuff */
 			/*
@@ -156,6 +160,33 @@ public class MainActivity extends Activity implements OnClickListener
 			
 			
 		}
+	}
+	
+	public void showResultOfScan(boolean result) {
+		String message = "";
+		if( result ) {
+
+			alertDialogBuilder.setTitle("Successful Scan!");
+			message = "You may enter.";
+		}
+		else {
+
+			alertDialogBuilder.setTitle("Scan Failed!");
+			message = "This qr content could not be found, or has been found and scanned already.";
+		}
+		 
+		// set dialog message
+		alertDialogBuilder
+			.setMessage(message)
+			.setCancelable(false)
+			.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog,int id) {
+					dialog.dismiss();
+
+				}
+			  });
+
+		alertDialogBuilder.show();
 	}
 
 }
