@@ -7,6 +7,7 @@ import com.google.gdata.client.authn.oauth.OAuthParameters.OAuthType;
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
 import com.google.gdata.data.*;
 import com.google.gdata.data.batch.*;
+import com.google.gdata.data.spreadsheet.CustomElementCollection;
 import com.google.gdata.data.spreadsheet.ListEntry;
 import com.google.gdata.data.spreadsheet.ListFeed;
 import com.google.gdata.data.spreadsheet.SpreadsheetEntry;
@@ -38,20 +39,19 @@ public class MySpreadsheet {
 		@Override
 		protected Boolean doInBackground(String... params) {
 			// TODO Auto-generated method stub
+			/*
 			try
-			{
-		        System.out.println("Hi1");
-		        
+			{	        
 
-	        GoogleOAuthParameters oauthParameters = new GoogleOAuthParameters();
-	        oauthParameters.setOAuthConsumerKey (Config.CLIENT_ID);
-	        oauthParameters.setOAuthConsumerSecret (Config.CLIENT_SECRET);
-	        oauthParameters.setOAuthType (OAuthType.TWO_LEGGED_OAUTH);
-	        oauthParameters.setScope ("https://spreadsheets.google.com/feeds/");
-
-			SpreadsheetService client = new SpreadsheetService("Print Google Spreadsheet Demo");
-			client.useSsl ();
-			client.setOAuthCredentials (oauthParameters, new OAuthHmacSha1Signer ());
+		        GoogleOAuthParameters oauthParameters = new GoogleOAuthParameters();
+		        oauthParameters.setOAuthConsumerKey (Config.CLIENT_ID);
+		        oauthParameters.setOAuthConsumerSecret (Config.CLIENT_SECRET);
+		        oauthParameters.setOAuthType (OAuthType.TWO_LEGGED_OAUTH);
+		        oauthParameters.setScope ("https://spreadsheets.google.com/feeds/");
+	
+				SpreadsheetService client = new SpreadsheetService("QRScanner");
+				client.useSsl();
+				client.setOAuthCredentials (oauthParameters, new OAuthHmacSha1Signer ());
 
 
 				if( client != null ){
@@ -82,6 +82,43 @@ public class MySpreadsheet {
 		        System.out.println(e);
 		    }
 			return null;
+			*/
+		    try {
+		        GoogleOAuthParameters oauthParameters = new GoogleOAuthParameters();
+		        oauthParameters.setOAuthConsumerKey (Config.CLIENT_ID);
+		        oauthParameters.setOAuthConsumerSecret (Config.CLIENT_SECRET);
+		        oauthParameters.setOAuthType (OAuthType.TWO_LEGGED_OAUTH);
+		        oauthParameters.setScope ("https://spreadsheets.google.com/feeds/");
+		        
+				SpreadsheetService service = new SpreadsheetService("QRScanner");
+				service.useSsl();
+				service.setOAuthCredentials (oauthParameters, new OAuthHmacSha1Signer ());
+			
+		      // Notice that the url ends
+		      // with default/public/values.
+		      // That wasn't obvious (at least to me)
+		      // from the documentation.
+		      String urlString = Config.SPREADSHEET_PUBLIC_URL;
+
+		      // turn the string into a URL
+		      URL url = new URL(urlString);
+
+		      // You could substitute a cell feed here in place of
+		      // the list feed
+		      ListFeed feed = service.getFeed(url, ListFeed.class);
+
+		      for (ListEntry entry : feed.getEntries()) {
+		        CustomElementCollection elements = entry.getCustomElements();
+		        String name = elements.getValue("fullname");
+		        System.out.println(name);
+		        String number = elements.getValue("emailaddress");
+		        System.out.println(number);
+		      }
+		    } catch (Exception e) {
+		      e.printStackTrace();
+		    }
+		    
+		    return true;
 		}
 		
 		@Override

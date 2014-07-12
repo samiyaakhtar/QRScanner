@@ -42,7 +42,7 @@ public class MainActivity extends Activity implements OnClickListener
 		formatTxt = (TextView)findViewById(R.id.scan_format);
 		contentTxt = (TextView)findViewById(R.id.scan_content);
 		
-		//sheet = new MySpreadsheet(this);
+		sheet = new MySpreadsheet(this);
 		
 		scanBtn.setOnClickListener(this);
 	}
@@ -104,7 +104,10 @@ public class MainActivity extends Activity implements OnClickListener
 			formatTxt.setText("FORMAT: " + scanFormat);
 			contentTxt.setText("CONTENT: " + scanContent);
 			
+			sheet.verifyScan(scanContent);
 			
+			/* Json stuff */
+			/*
 			String finalurl = url1 + scanContent + url2;
 			Json getJsonFromUrl = new Json();
 			getJsonFromUrl.execute(finalurl);
@@ -127,6 +130,7 @@ public class MainActivity extends Activity implements OnClickListener
 				        "Entry is legal!", Toast.LENGTH_SHORT);
 				    toast.show();
 			}
+			*/
 		//	sheet.verifyScan(scanContent);
 			/* ArraySolution 
 			if( ArraySolution.isPersonAuthorizedToEnter(scanContent)) {
