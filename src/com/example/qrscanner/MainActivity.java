@@ -34,9 +34,9 @@ public class MainActivity extends Activity implements OnClickListener
 	private TextView formatTxt, contentTxt;
 	ReadSpreadsheet sheet;
     private AlertDialog.Builder alertDialogBuilder;
-	String url1 ="https://spreadsheets.google.com/tq?tqx=out:tq?tqx=out:json&tq=select+B+where+(+G+%3D+";
+	//String url1 ="https://spreadsheets.google.com/tq?tqx=out:tq?tqx=out:json&tq=select+B+where+(+G+%3D+";
 	
-	String url2 = ")&key=1ueaft1tUCYssK_ucANSQbhmF7At09lv1MqSapH6T_Gc&gid=2";	
+	//String url2 = ")&key=1ueaft1tUCYssK_ucANSQbhmF7At09lv1MqSapH6T_Gc&gid=2";	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
