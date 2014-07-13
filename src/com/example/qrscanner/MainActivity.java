@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
@@ -108,9 +109,17 @@ public class MainActivity extends Activity implements OnClickListener
 			formatTxt.setText("FORMAT: " + scanFormat);
 			contentTxt.setText("CONTENT: " + scanContent);
 			
-			showResultOfScan( sheet.verifyScan(scanContent) );
+			// If it doesn't exist in map, check spreadsheet
+			if(sheet.verifyScan(scanContent)) {
+				showResultOfScan( true  );
+			}
+			else {
+				boolean result = sheet.verifyScanFromSpreadsheet(scanContent);
+				showResultOfScan( result  );
+			}
 			
-			/* Json stuff */
+			
+			/* Json stuff - uncomment/comment the stuff below to use Json */
 			/*
 			String finalurl = url1 + scanContent + url2;
 			Json getJsonFromUrl = new Json();
@@ -124,31 +133,9 @@ public class MainActivity extends Activity implements OnClickListener
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			if (rows.length() == 0){
-				Toast toast = Toast.makeText(getApplicationContext(), 
-				        "Invalid QR! Cannot Enter!", Toast.LENGTH_SHORT);
-				    toast.show();
-			}
-			else {
-				Toast toast = Toast.makeText(getApplicationContext(), 
-				        "Entry is legal!", Toast.LENGTH_SHORT);
-				    toast.show();
-			}
+			showResultOfScan( rows != null && rows.length() != 0);
 			*/
-		//	sheet.verifyScan(scanContent);
-			/* ArraySolution 
-			if( ArraySolution.isPersonAuthorizedToEnter(scanContent)) {
-				Toast toast = Toast.makeText(getApplicationContext(), 
-				        "Entry is legal!", Toast.LENGTH_SHORT);
-				    toast.show();
-			}
-			else
-			{
-				Toast toast = Toast.makeText(getApplicationContext(), 
-				        "Duplicate QR! Cannot Enter!", Toast.LENGTH_SHORT);
-				    toast.show();
-			}
-			*/
+			
 		}
 		else{
 		    Toast toast = Toast.makeText(getApplicationContext(), 
